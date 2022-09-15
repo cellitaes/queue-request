@@ -47,7 +47,7 @@ const isExecutingTaskReducer = (status, action) => {
 };
 
 function App() {
-  const [jobs, dispatch] = useReducer(jobsReducer, {
+  const [jobsState, dispatch] = useReducer(jobsReducer, {
     jobs: [],
     email: "",
     isValid: false,
@@ -61,9 +61,9 @@ function App() {
 
   useEffect(() => {
     const func = async () => {
-      if (jobs.jobs.length > 0 && !isExecutingTask) {
+      if (jobsState.jobs.length > 0 && !isExecutingTask) {
         setIsExecutingTask(true);
-        const job = jobs.jobs[0];
+        const job = jobsState.jobs[0];
         try {
           await job().then((res) => {
             dispatch({
@@ -81,7 +81,7 @@ function App() {
     };
 
     func();
-  }, [jobs.jobs, isExecutingTask, setIsExecutingTask]);
+  }, [jobsState.jobs, isExecutingTask, setIsExecutingTask]);
 
   const addJob = async (job) => {
     dispatch({ type: "ADD", job });
@@ -96,7 +96,7 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`email: ${jobs.email}`);
+    alert(`email: ${jobsState.email}`);
   };
 
   const touchHandler = () => {
@@ -108,18 +108,20 @@ function App() {
   return (
     <div className="App">
       <form onSubmit={handleSubmit}>
-        {jobs.isLoading && <LoadingSpinner />}
+        {jobsState.isLoading && <LoadingSpinner />}
         <label>email:</label>
         <input
-          className={`${jobs.isTouched && !jobs.isValid && "input--invalid"}`}
+          className={`${
+            jobsState.isTouched && !jobsState.isValid && "input--invalid"
+          }`}
           type="text"
           onBlur={touchHandler}
           onChange={handleEmail}
         />
-        {jobs.isTouched && !jobs.isValid && (
+        {jobsState.isTouched && !jobsState.isValid && (
           <p>Please input valid email adress!</p>
         )}
-        <button disabled={!jobs.isValid}>Submit</button>
+        <button disabled={!jobsState.isValid}>Submit</button>
       </form>
     </div>
   );
