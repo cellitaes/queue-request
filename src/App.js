@@ -121,7 +121,7 @@ function App() {
         {jobsState.isTouched && !jobsState.isValid && (
           <p>Please input valid email adress!</p>
         )}
-        <button disabled={!jobsState.isValid}>Submit</button>
+        <button disabled={!jobsState.isValid || isExecutingTask}>Submit</button>
       </form>
     </div>
   );
